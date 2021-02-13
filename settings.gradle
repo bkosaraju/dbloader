@@ -1,0 +1,26 @@
+/*
+ * Copyright (c) 2021. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+ * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+ * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+ * Vestibulum commodo. Ut rhoncus gravida arcu.
+ */
+
+pluginManagement {
+    repositories {
+        maven {
+            url((System.getenv("ARTIFACTORY_URL") ?: "https://plugins.gradle.org/m2/"))
+            if (System.getenv("ARTIFACTORY_USER") || Project.hasProperty('artifactoryUser') ) {
+                credentials {
+                    username = System.getenv("ARTIFACTORY_USER") ?: artifactoryUser
+                    password = System.getenv("ARTIFACTORY_PASSWORD") ?: artifactoryPassword
+                }
+            }
+        }
+    }
+}
+
+gradle.ext.projectGroup = "io.github.bkosaraju"
+gradle.ext.projectName = "dbloader"
+gradle.ext.artifactoryUrl = System.getenv("ARTIFACTORY_URL") ?: "https://repo1.maven.org/maven2/"
+rootProject.setName(gradle.ext.projectName)

@@ -1,0 +1,21 @@
+<!--
+  ~ Copyright (c) 2021. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+  ~ Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+  ~ Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+  ~ Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+  ~ Vestibulum commodo. Ut rhoncus gravida arcu.
+  -->
+
+<!--<?xml version="1.0" encoding="UTF-8"?>-->
+<!--<configuration>-->
+<!--    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">-->
+<!--        <encoder>-->
+<!--            <pattern>%p [%d] %logger{1} [%file:%line] - %msg%n</pattern>-->
+<!--            &lt;!&ndash;            <pattern>%p [%d{yyyy-MM-dd HH:mm:ss,SSS}] %c{3}:[%C{1}:%M:%L] - [%t][%file:%line] - %m%n</pattern>&ndash;&gt;-->
+<!--            &lt;!&ndash;            <pattern>%d{HH:mm:ss.SSS} %-5level: [%C{20}] - %msg%n</pattern> &ndash;&gt;-->
+<!--        </encoder>-->
+<!--    </appender>-->
+<!--        <root level="info">-->
+<!--            <appender-ref ref="STDOUT" />-->
+<!--        </root>-->
+<!--</configuration>-->

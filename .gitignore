@@ -1,0 +1,25 @@
+.gradle/
+.project
+.settings/
+.vscode/
+build/
+.settings
+.gradle
+.idea/
+bin/
+#not to incled as it will be genererated runtime
+src/test/resources/jdbcDataSource/encryptedCredentialsFile.properties
+spark-warehouse/
+.classpath
+derby.log
+metastore_db/
+out/
+tgt/
+.DS_Store
+
+# Package Files #
+*.jar
+hs_err_pid*
+*.iml
+bash.exe.stackdump
+

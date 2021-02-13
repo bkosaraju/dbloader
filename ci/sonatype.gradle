@@ -1,0 +1,63 @@
+apply plugin: 'maven'
+apply plugin: 'signing'
+
+artifacts {
+    archives jar
+    archives shadowJar
+    archives sourcesJar
+    archives scaladocJar
+}
+
+signing {
+    sign configurations.archives
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            pom.project {
+                name 'inferencer'
+                packaging 'jar'
+                // optionally artifactId can be defined here
+                description 'inferencer is a Spark library for which curate files through given input parameters and load thenm into target, source can be HDFS,S3,Local filesystem to another distributed/local filesystem with Schema retained formats(preferred parquet/ORC/Avro)'
+                url 'https://bkosaraju.github.io/inferencer'
+
+                scm {
+                    connection 'scm:git:https://github.com/bkosaraju/inferencer.git'
+                    url 'https://github.com/bkosaraju/inferencer'
+                }
+
+                licenses {
+                    license {
+                        name 'The Apache License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id 'bkosaraju'
+                        name 'Bhargav Kosaraju'
+                    }
+                }
+            }
+        }
+    }
+}
+
+/*
+ * Copyright (c) 2021. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+ * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+ * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+ * Vestibulum commodo. Ut rhoncus gravida arcu.
+ */

@@ -1,0 +1,87 @@
+apply plugin: "com.jfrog.artifactory"
+apply plugin: 'maven-publish'
+
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task scaladocJar(type: Jar, dependsOn: scaladoc) {
+    classifier = 'javadoc'
+    from scaladoc.destinationDir
+}
+
+artifacts {
+    archives jar
+    archives shadowJar
+    archives sourcesJar
+    archives scaladocJar
+}
+
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            publication ->
+                from components.java
+                artifact sourcesJar
+                artifact scaladocJar
+                artifact shadowJar
+                artifactId archivesBaseName
+        }
+    }
+}
+
+artifactory {
+    contextUrl = "${gradle.ext.artifactoryUrl}"
+
+    publish {
+        repository {
+            repoKey = "${artifactoryRepoKey}"
+            maven = true
+            username = "${artifactoryUser}"
+            password = "${artifactoryPassword}"
+            artifactLayout = "${gradle.projectName}/${version}/${gradle.projectName}_${scalaVariant}-${version}.jar"
+        }
+        defaults {
+            publications("mavenJava")
+        }
+    }
+    clientConfig.setIncludeEnvVars(true)
+    clientConfig.setEnvVarsExcludePatterns('*password*,*secret*')
+    clientConfig.info.setBuildName("${gradle.projectName} (${System.getenv('GIT_BRANCH')})")
+    clientConfig.info.setBuildTimestamp("${buildDate}")
+    clientConfig.info.setBuildNumber(System.getenv('BUILD_NUMBER'))
+    clientConfig.info.setBuildUrl(System.getenv('BUILD_URL'))
+}
+
+artifactoryPublish {
+    doFirst {
+        try {
+            switch (gitBranchName.toLowerCase()) {
+                case "master":
+                case "staging":
+                    break
+                default:
+                    throw new PublishException("Can only publish to artifactory from the 'master' and 'staging' branches. current branch: ${gitBranchName.toLowerCase()}")
+            }
+        } catch (exc) {
+            logger.warn("Unknown Branch : ${gitBranchName.toLowerCase()} to Publish hence proceeding with repokey which is provided at environment")
+        }
+    }
+}
+
+
+/*
+ * Copyright (c) 2021. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+ * Morbi non lorem porttitor neque feugiat blandit. Ut vitae ipsum eget quam lacinia accumsan.
+ * Etiam sed turpis ac ipsum condimentum fringilla. Maecenas magna.
+ * Proin dapibus sapien vel ante. Aliquam erat volutpat. Pellentesque sagittis ligula eget metus.
+ * Vestibulum commodo. Ut rhoncus gravida arcu.
+ */
+
+
+//Finally Tag the code
+gitRepo.tag.add(name: version, message: gitBranchName + ' build commenced on ' + buildDate.toString(), force: true, pointsTo: gitHead)
+gitRepo.close()
